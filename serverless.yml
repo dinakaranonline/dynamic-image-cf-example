@@ -4,7 +4,7 @@ service:
 provider:
   name: aws
   stage: ${opt:stage, 'dev'}
-  region: ${opt:region, 'ap-southeast-2'}
+  region: ${opt:region, 'us-east-1'}
   iamRoleStatements:
     - Effect: Allow
       Action: s3:PutObject
@@ -18,8 +18,8 @@ provider:
 
 custom:
   userParams:
-    PRIVATE_BUCKET: shinemelb-private-bucket
-    CDN_BUCKET: shinemelb-cdn-bucket
+    PRIVATE_BUCKET: shinemelb-private-bucket-cat
+    CDN_BUCKET: shinemelb-cdn-bucket-cat
 
 functions:
   cdn-image:
