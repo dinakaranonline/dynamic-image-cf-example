@@ -13,15 +13,15 @@ exports.handler = async (event) => {
       body: 'Not authorized'
     }
   }
-  const { image, width } = event.pathParameters
+  let { image, width } = event.pathParameters
 
   // redirect to default supported width when requested with is not supported
-  if (!supportedWidths.has(width)) {
+ /*  if (!supportedWidths.has(width)) {
     return {
         statusCode: 403,
         body: 'Not authorized'
     }
-  }
+  } */
 
   const file = await s3
     .getObject({
@@ -29,9 +29,23 @@ exports.handler = async (event) => {
       Key: image
     })
     .promise()
+  let resolution;  
+  console.log(`received width ###${width}`);
+  if(width === 'desktop'){
+    resolution="1080";
+  }
+  else if(width === 'tablet'){
+    resolution="720";
+  }
+  else if(width === 'mobile'){
+    resolution="480";
+  } 
+  else resolution="720";
+  
+  console.log(`assigned resolution ###${resolution}`);
 
   const { data, info } = await sharp(file.Body)
-    .resize({ width: parseInt(width) })
+    .resize({ width: parseInt(resolution) })
     .toBuffer({ resolveWithObject: true })
 
   await s3
