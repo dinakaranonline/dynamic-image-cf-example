@@ -14,7 +14,9 @@ exports.handler = async (event) => {
     }
   }
   let { image, width } = event.pathParameters
-
+  console.log('image path###'+image);
+  let imageKey='media/'+image;
+  console.log('image s3 path###'+imageKey);
   // redirect to default supported width when requested with is not supported
  /*  if (!supportedWidths.has(width)) {
     return {
@@ -26,7 +28,7 @@ exports.handler = async (event) => {
   const file = await s3
     .getObject({
       Bucket: process.env.PRIVATE_BUCKET_NAME,
-      Key: image
+      Key: imageKey
     })
     .promise()
   let resolution;  
@@ -51,7 +53,7 @@ exports.handler = async (event) => {
   await s3
   .putObject({
     Bucket: process.env.CDN_BUCKET_NAME,
-    Key: `image/${width}/${image}`,
+    Key: `media/${width}/${image}`,
     Body: data,
     ContentType: 'image/' + info.format,
     Metadata: {
